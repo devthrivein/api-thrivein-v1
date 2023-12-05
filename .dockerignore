@@ -1,0 +1,7 @@
+Dockerfile
+Readme.md
+*.pyo
+*.pyc
+*.pyd
+__pycache__
+.pytese_cache
