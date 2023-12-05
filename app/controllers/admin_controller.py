@@ -29,10 +29,15 @@ def update_status_order(order_id):
     return jsonify(response_update), 201
 
 def get_all_order():
+    # query Parameters untuk pagination 
+    size = request.args.get('size', type=int)
+    page = request.args.get('page', type=int)
+
     is_order_now = True
     #query firestore untuk mendapatkan detail history order berdasarkan 'order_id'
     order_ref = db.collection('order').where("is_order_now", "==" , is_order_now )
-    detail_result = order_ref.stream()
+    query = order_ref.limit(size).offset((page - 1) * size)
+    detail_result = query.stream()
 
     all_order = []
     for result in detail_result:
@@ -47,7 +52,7 @@ def get_all_order():
         all_order.append(all_order_info)
     
     #return response
-    response = {'order_data': all_order}
+    response = {"meta":page, 'order_data': all_order}
     return jsonify(response), 200
 
 def update_banner(id):
