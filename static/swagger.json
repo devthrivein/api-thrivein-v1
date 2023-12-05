@@ -1,0 +1,1547 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "description": "ThriveIn RESTful API with Flask",
+    "version": "1.0.0",
+    "title": "ThriveIn API",
+    "license": {
+      "name": "ThriveIn",
+      "url": "https://"
+    }
+  },
+  "tags": [
+    {
+      "name": "Auth",
+      "description": "Everyting about authorization (Register, Login)"
+    },
+    {
+      "name": "Home",
+      "description": "Access to Home Page Content"
+    },
+    {
+      "name": "Solutions",
+      "description": "Access to solutions, service, and order"
+    },
+    {
+      "name": "History",
+      "description": "Access to User History"
+    },
+    {
+      "name": "Waiting List",
+      "description": "Access to waiting list and detail waiting order"
+    },
+    {
+      "name": "User Setting",
+      "description": "Logout and update data"
+    },
+    {
+      "name": "Admin",
+      "description": "Everyting about admin role"
+    }
+  ],
+  "paths": {
+    "/register": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "register user to ThriveIn application",
+        "operationId": "registerUser",
+        "requestBody": {
+          "description": "User data that needs to be added to register",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/register"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "succesful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/registerResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/login": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "user login to ThriveIn application",
+        "operationId": "loginUser",
+        "parameters": [
+          {
+            "name": "email",
+            "in": "Request Body",
+            "description": "email for login that user have been registered ",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "password",
+            "in": "Request Body",
+            "description": "password for login that user have been registered ",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "succesful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/loginResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/banners": {
+      "get": {
+        "tags": ["Home"],
+        "summary": "Get banners from the database",
+        "operationId": "getbanners",
+        "responses": {
+          "201": {
+            "description": "succesful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/bannerResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/services": {
+      "get": {
+        "tags": ["Home"],
+        "summary": "Get Services from the database",
+        "operationId": "getservices",
+        "responses": {
+          "201": {
+            "description": "succesful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/servicesResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/articles": {
+      "get": {
+        "tags": ["Home"],
+        "summary": "Get articles from the database",
+        "operationId": "getarticles",
+        "parameters": [
+          {
+            "name": "size",
+            "in": "query",
+            "description": "quantity of article in 1 page",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "which page does it belong to",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "succesful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/articlesResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/list-services/<id>":{
+      "get": {
+        "tags": ["Solutions"],
+        "summary": "Get list Services from the database",
+        "operationId": "getListservices",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "route",
+            "description": "the category id of service",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example":"online"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "succesful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/list-servicesResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/list-services/<service_id>":{
+      "get": {
+        "tags": ["Solutions"],
+        "summary": "Get detail Services from the database",
+        "operationId": "getdetailtservices",
+        "parameters": [
+          {
+            "name": "service_id",
+            "in": "route",
+            "description": "the id of service",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "succesful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/detail-serviceResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/list-services/<service_id>/portfolio":{
+      "get": {
+        "tags": ["Solutions"],
+        "summary": "Get Service portfolio from the database",
+        "operationId": "getserviceportfolio",
+        "parameters": [
+          {
+            "name": "service_id",
+            "in": "route",
+            "description": "the id of service",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "description": "quantity of portfolio image in 1 page",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "which page does it belong to",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "succesful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/portfolioResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/list-services/order": {
+      "post": {
+        "tags": ["Solutions"],
+        "summary": " user send order to ThriveIn application",
+        "operationId": "sendOrder",
+        "requestBody": {
+          "description": "Order data that needs to be added to Send Order request",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/sendOrder"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "succesful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/sendOrderResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/list-services/order-later": {
+      "post": {
+        "tags": ["Solutions"],
+        "summary": " user not yet order to ThriveIn application",
+        "operationId": "sendOrderLater",
+        "requestBody": {
+          "description": "Order data that needs to be added to Send Order request",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/sendOrder"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "succesful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/sendOrderResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/list-services/order-update/<order_id>": {
+      "put": {
+        "tags": ["Solutions"],
+        "summary": " user hit the order now button after order later ",
+        "operationId": "updatOrder",
+        "parameters": [
+          {
+            "name": "order_id",
+            "in": "path",
+            "description": "ID of the order to be updated",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "succesful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type":"object",
+                  "properties":{
+                    "message":{
+                      "type":"string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/list-services/order/<order_id>": {
+      "get": {
+        "tags": ["Solutions"],
+        "summary": " user get order data",
+        "operationId": "getOrder",
+        "parameters": [
+          {
+            "name": "order_id",
+            "in": "route",
+            "description": "the id of service",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "succesful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/getOrderResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/history-order": {
+      "get": {
+        "tags": ["History"],
+        "summary": "Get History Service from the user",
+        "operationId": "getHistory",
+        "responses": {
+          "201": {
+            "description": "succesful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/historyResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/history-order/<order_id>": {
+      "get": {
+        "tags": ["History"],
+        "summary": "Get detail History Service from the user",
+        "operationId": "getdetailHistory",
+        "parameters":[
+          {
+            "name": "order_id",
+            "in": "route",
+            "description": "the id of order",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "succesful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/detailHistoryResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/waiting-order": {
+      "get": {
+        "tags": ["Waiting List"],
+        "summary": "Get waiting list order from the user",
+        "operationId": "getWaitingList",
+        "responses": {
+          "201": {
+            "description": "succesful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/waitingListResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/waiting-order/<order_id>": {
+      "get": {
+        "tags": ["Waiting List"],
+        "summary": "Get detail Waiting List from the user",
+        "operationId": "getdetailWaiting",
+        "parameters":[
+          {
+            "name": "order_id",
+            "in": "route",
+            "description": "the id of order",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "succesful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/detailWaitingResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/logout": {
+      "post": {
+        "tags": ["User Setting"],
+        "summary": "User logout from app",
+        "operationId": "userLogut",
+        "responses": {
+          "201": {
+            "description": "succesful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/settingResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/update-user": {
+      "put": {
+        "tags": ["User Setting"],
+        "summary": "User update the user data from app",
+        "operationId": "userUpdate",
+        "requestBody": {
+          "description": "User data that can  be updated",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/updateUser"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "succesful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/settingResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/update-store": {
+      "put": {
+        "tags": ["User Setting"],
+        "summary": "User update the store data from app",
+        "operationId": "storeUpdate",
+        "requestBody": {
+          "description": "store data that can  be updated",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/updateStore"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "succesful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/settingResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/order": {
+      "get": {
+        "tags": ["Admin"],
+        "summary": " Admin get all order data",
+        "operationId": "getOrder",
+        "responses": {
+          "201": {
+            "description": "succesful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref":"#/components/schemas/allOrderResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/order/<order_id>": {
+      "get": {
+        "tags": ["Admin"],
+        "summary": " Admin get 1 order data  ",
+        "operationId": "oneOrder",
+        "parameters": [
+          {
+            "name": "order_id",
+            "in": "path",
+            "description": "ID of the order",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "succesful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref":"#/components/schemas/oneOrderResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/order-count": {
+      "get": {
+        "tags": ["Admin"],
+        "summary": " Admin get the amount of order",
+        "operationId": "getOrderCount",
+        "responses": {
+          "201": {
+            "description": "succesful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref":"#/components/schemas/orderCountResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/user-count": {
+      "get": {
+        "tags": ["Admin"],
+        "summary": " Admin get the amount of user",
+        "operationId": "getUserCount",
+        "responses": {
+          "201": {
+            "description": "succesful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref":"#/components/schemas/userCountResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/order-progress/<order_id>": {
+      "put": {
+        "tags": ["Admin"],
+        "summary": " Admin update the order progress status in dashboard  ",
+        "operationId": "updateProgress",
+        "parameters": [
+          {
+            "name": "order_id",
+            "in": "path",
+            "description": "ID of the order to be updated",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Order data that needs to be updated",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "succesful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type":"object",
+                  "properties":{
+                    "message":{
+                      "type":"string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/banners/<id>": {
+      "put": {
+        "tags": ["Admin"],
+        "summary": " Admin update the banner data in dashboard  ",
+        "operationId": "updateBanner",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the banner",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "banners data that needs to be updated",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref":"#/components/schemas/updateBanner"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "succesful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref":"#/components/schemas/updateBannerResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "register": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
+          },
+          "store_name": {
+            "type": "string"
+          },
+          "store_email": {
+            "type": "string"
+          },
+          "store_phone": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string"
+          },
+          "store_type": {
+            "type": "string"
+          }
+        }
+      },
+      "registerResponse": {
+        "type": "object",
+        "properties": {
+          "store": {
+            "type": "object",
+            "properties": {
+              "address": {
+                "type": "string"
+              },
+              "store_email": {
+                "type": "string"
+              },
+              "store_name": {
+                "type": "string"
+              },
+              "store_phone": {
+                "type": "string"
+              },
+              "type": {
+                "type": "string"
+              }
+            }
+          },
+          "user": {
+            "type": "object",
+            "properties": {
+              "avatarUrl": {
+                "type": "string"
+              },
+              "email": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "phone": {
+                "type": "string"
+              },
+              "token": {
+                "type": "string"
+              },
+              "user_id": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "loginResponse": {
+        "type": "object",
+        "properties": {
+          "store": {
+            "type": "object",
+            "properties": {
+              "address": {
+                "type": "string"
+              },
+              "store_email": {
+                "type": "string"
+              },
+              "store_name": {
+                "type": "string"
+              },
+              "store_phone": {
+                "type": "string"
+              },
+              "type": {
+                "type": "string"
+              }
+            }
+          },
+          "user": {
+            "type": "object",
+            "properties": {
+              "avatarUrl": {
+                "type": "string"
+              },
+              "email": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "phone": {
+                "type": "string"
+              },
+              "token":{
+                "type":"string"
+              },
+              "user_id": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "bannerResponse": {
+        "type": "object",
+        "properties": {
+          "banners": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "banner_url": {
+                  "type": "string"
+                },
+                "banner_txt": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "servicesResponse":{
+        "type":"object",
+        "properties":{
+          "services":{
+            "type":"array",
+            "items":{
+              "type":"object",
+              "properties": {
+                "color": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "icon_url": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "articlesResponse": {
+        "type": "object",
+        "properties": {
+          "meta":{
+            "type":"integer"
+          },
+          "articles": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "article_id": {
+                  "type": "string"
+                },
+                "banner_url": {
+                  "type": "string"
+                },
+                "content": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "uploaded_date": {
+                  "type": "string",
+                  "format": "date-time"
+                }
+              }
+            }
+          }
+        }
+      },      
+      "list-servicesResponse": {
+        "type": "object",
+        "properties": {
+          "list-services": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "description": {
+                  "type": "string"
+                },
+                "icon_url": {
+                  "type": "string"
+                },
+                "service_id": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "detail-serviceResponse": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string"
+          },
+          "icon_url": {
+            "type": "string"
+          },
+          "service_id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          }
+        }
+      },
+      "portfolioResponse": {
+        "type": "object",
+        "properties": {
+          "meta":{
+            "type":"integer"
+          },
+          "portfolio":{
+            "type":"array",
+            "items" :{
+              "type":"object",
+              "properties":{
+                "description": {
+                  "type": "string"
+                },
+                "imageUrl": {
+                  "type": "string"
+                },
+                "service_id": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "uploaded_date": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "sendOrder": {
+        "type": "object",
+        "properties": {
+          "consultation_id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "payment_method": {
+            "type": "string"
+          },
+          "total_order": {
+            "type": "integer"
+          },
+          "discount": {
+            "type": "integer"
+          },
+          "total_pay": {
+            "type": "integer"
+          }
+        }
+      },
+      "sendOrderResponse": {
+        "type": "object",
+        "properties": {
+          "discount": {
+            "type": "integer"
+          },
+          "order_id": {
+            "type": "string"
+          },
+          "payment_method": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "total_order": {
+            "type": "integer"
+          },
+          "total_pay": {
+            "type": "integer"
+          },
+          "transaction_date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "user_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "invoice": {
+            "type": "string"
+          }
+        }
+      },
+      "getOrderResponse": {
+        "type": "object",
+        "properties": {
+          "address": {
+            "type": "string"
+          },
+          "consultation_id": {
+            "type": "string"
+          },
+          "discount": {
+            "type": "integer"
+          },
+          "is_order_now": {
+            "type": "boolean"
+          },
+          "order_id": {
+            "type": "string"
+          },
+          "payment_method": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "total_order": {
+            "type": "integer"
+          },
+          "total_pay": {
+            "type": "integer"
+          },
+          "transaction_date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "user_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "invoice": {
+            "type": "string"
+          }
+        }
+      },                                          
+      "historyResponse": {
+        "type": "object",
+        "properties": {
+          "history_services": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "order_id": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "transactionDate": {
+                  "type": "string",
+                  "format": "date-time"
+                }
+              }
+            }
+          }
+        }
+      },
+      "detailHistoryResponse": {
+        "type": "object",
+        "properties": {
+          "discount": {
+            "type": "integer"
+          },
+          "is_order_now": {
+            "type": "boolean"
+          },
+          "order_id": {
+            "type": "string"
+          },
+          "payment_method": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "total_order": {
+            "type": "integer"
+          },
+          "total_pay": {
+            "type": "integer"
+          },
+          "transaction_date": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "settingResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "updateUser": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
+          }
+        }
+      },
+      "updateStore": {
+        "type": "object",
+        "properties": {
+          "store_name": {
+            "type": "string"
+          },
+          "store_email": {
+            "type": "string"
+          },
+          "store_phone": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string"
+          },
+          "store_type": {
+            "type": "string"
+          }
+        }
+      },
+      "waitingListResponse": {
+        "type": "object",
+        "properties": {
+          "waiting_list_order": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "order_id": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "transaction_date": {
+                  "type": "string",
+                  "format": "date-time"
+                }
+              }
+            }
+          }
+        }
+      },      
+      "detailWaitingResponse": {
+        "type": "object",
+        "properties": {
+          "discount": {
+            "type": "integer"
+          },
+          "is_order_now": {
+            "type": "boolean"
+          },
+          "order_id": {
+            "type": "string"
+          },
+          "payment_method": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "total_order": {
+            "type": "integer"
+          },
+          "total_pay": {
+            "type": "integer"
+          },
+          "transaction_date": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "allOrderResponse": {
+        "type": "object",
+        "properties": {
+          "order_data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "order_id": {
+                  "type": "string"
+                },
+                "status": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "transaction_date": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "name": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "oneOrderResponse": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "order_id": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "transaction_date": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },      
+      "orderCountResponse": {
+        "type": "object",
+        "properties": {
+          "baru": {
+            "type": "integer"
+          },
+          "diproses": {
+            "type": "integer"
+          },
+          "selesai": {
+            "type": "integer"
+          }
+        }
+      },
+      "userCountResponse": {
+        "type": "object",
+        "properties": {
+          "user": {
+            "type": "integer"
+          }
+        }
+      },
+      "updateBanner": {
+        "type": "object",
+        "properties": {
+          "banner_txt": {
+            "type": "string"
+          },
+          "banner_url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "title": {
+            "type": "string"
+          }
+        }
+      },      
+      "updateBannerResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        }
+      }                                    
+    }
+  }
+}
