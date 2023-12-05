@@ -687,6 +687,26 @@
         "tags": ["Admin"],
         "summary": " Admin get all order data",
         "operationId": "getOrder",
+        "parameters": [
+          {
+            "name": "size",
+            "in": "query",
+            "description": "quantity of order in 1 page",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "which page does it belong to",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
         "responses": {
           "201": {
             "description": "succesful operation",
