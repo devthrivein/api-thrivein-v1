@@ -237,7 +237,7 @@
         ]
       }
     },
-    "/list-services/<service_id>":{
+    "/detail-services/<service_id>":{
       "get": {
         "tags": ["Solutions"],
         "summary": "Get detail Services from the database",
