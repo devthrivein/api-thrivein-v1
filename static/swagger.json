@@ -910,6 +910,76 @@
           }
         ]
       }
+    },
+    "/post-article": {
+      "post": {
+        "tags": ["Admin"],
+        "summary": " Admin post article to databse ",
+        "operationId": "postArticle",
+        "requestBody": {
+          "description": "article data that needs to be inserted",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref":"#/components/schemas/postArticle"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "succesful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref":"#/components/schemas/postArticleResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/service/<service_id>": {
+      "put": {
+        "tags": ["Admin"],
+        "summary": " Admin update data service ",
+        "operationId": "putservice",
+        "requestBody": {
+          "description": "service data that can be updated",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref":"#/components/schemas/updateService"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "succesful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref":"#/components/schemas/updateServiceResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
     }
   },
   "components": {
@@ -1470,6 +1540,9 @@
       "allOrderResponse": {
         "type": "object",
         "properties": {
+          "meta":{
+            "type":"integer"
+          },
           "order_data": {
             "type": "array",
             "items": {
@@ -1561,7 +1634,51 @@
             "type": "string"
           }
         }
-      }                                    
+      },
+      "postArticle": {
+        "type": "object",
+        "properties": {
+          "banner_url": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          }
+        }
+      },      
+      "postArticleResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "updateServiceResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "updateService": {
+        "type": "object",
+        "properties": {
+          "icon_url": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          }
+        }
+      }                                                    
     }
   }
 }
