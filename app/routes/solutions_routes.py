@@ -12,17 +12,17 @@ from flask_jwt_extended import jwt_required
 
 solutions_route = Blueprint('solutions_routes', __name__)
 
-@solutions_route.route('/list-services/<id>', methods=['GET'])
+@solutions_route.route('/list-services/<category>', methods=['GET'])
 @jwt_required()
-def list_services_route(id):
-    return list_services(id)
+def list_services_route(category):
+    return list_services(category)
 
 @solutions_route.route('/detail-services/<service_id>', methods=['GET'])
 @jwt_required()
 def service_detail_route(service_id):
     return service_detail(service_id)
 
-@solutions_route.route('/list-services/<service_id>/portfolio', methods=['GET'])
+@solutions_route.route('/detail-services/<service_id>/portfolio', methods=['GET'])
 @jwt_required()
 def portfolio_route(service_id):
     return service_portfolio(service_id)
