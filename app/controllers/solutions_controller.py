@@ -5,10 +5,10 @@ from app.config.config import db
 from firebase_admin import firestore
 from flask_jwt_extended import get_jwt_identity
 
-def list_services(id):
+def list_services(category):
 
     # Query ke firestore untuk mendapatkan 'list services' berdasarkan kategori
-    services_ref = db.collection('services').where('id', '==', id)
+    services_ref = db.collection('services').where('category', '==', category)
     results = services_ref.stream()
 
     # Respon
