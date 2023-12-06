@@ -17,7 +17,7 @@ solutions_route = Blueprint('solutions_routes', __name__)
 def list_services_route(id):
     return list_services(id)
 
-@solutions_route.route('/list-services/<service_id>', methods=['GET'])
+@solutions_route.route('/detail-services/<service_id>', methods=['GET'])
 @jwt_required()
 def service_detail_route(service_id):
     return service_detail(service_id)
