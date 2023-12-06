@@ -49,7 +49,10 @@ def services():
     for result in results:
         service_info = result.to_dict()
         services_data.append(service_info)
+    
+    # Menghilangkan kunci "id" dari setiap elemen dalam services_data
+    services_data_without_id = [{k: v for k, v in service.items() if k != 'id'} for service in services_data]
 
     # return response 
-    response = {"services": services_data}
+    response = {"services": services_data_without_id}
     return jsonify(response), 200
