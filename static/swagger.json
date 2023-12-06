@@ -201,16 +201,16 @@
         ]
       }
     },
-    "/list-services/<id>":{
+    "/list-services/<category>":{
       "get": {
         "tags": ["Solutions"],
         "summary": "Get list Services from the database",
         "operationId": "getListservices",
         "parameters": [
           {
-            "name": "id",
+            "name": "category",
             "in": "route",
-            "description": "the category id of service",
+            "description": "the category of service",
             "required": true,
             "schema": {
               "type": "string",
@@ -272,7 +272,7 @@
         ]
       }
     },
-    "/list-services/<service_id>/portfolio":{
+    "/detail-services/<service_id>/portfolio":{
       "get": {
         "tags": ["Solutions"],
         "summary": "Get Service portfolio from the database",
@@ -1154,7 +1154,7 @@
                 "icon_url": {
                   "type": "string"
                 },
-                "id": {
+                "category": {
                   "type": "string"
                 },
                 "title": {
@@ -1217,7 +1217,7 @@
                 "title": {
                   "type": "string"
                 },
-                "id": {
+                "category": {
                   "type": "string"
                 }
               }
