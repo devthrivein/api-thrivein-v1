@@ -5,3 +5,4 @@ Readme.md
 *.pyd
 __pycache__
 .pytese_cache
+.gitignore
