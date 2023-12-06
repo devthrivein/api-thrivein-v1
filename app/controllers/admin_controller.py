@@ -1,5 +1,7 @@
 from flask import jsonify, request
 from app.config.config import db
+from datetime import datetime
+from firebase_admin import firestore
 
 def update_status_order(order_id):
     # variabel data untuk request json
@@ -134,3 +136,73 @@ def admin_get_order(order_id):
     # return response
     response = {key: value for key, value in detail_result.items() if key not in excluded_fields}
     return jsonify(response), 200
+
+def generate_article_id():
+    # mendapatkan 'article_id' terakhir yang terdapat pada firestore
+    last_article_ref = db.collection('articles').order_by('order_id', direction=firestore.Query.DESCENDING).limit(1)
+    last_article = next(last_article_ref.stream(), None)
+
+    # Extract the order_id terakhir
+    last_article_id = last_article.to_dict().get('article_id') if last_article else None
+
+    # Generate order_id baru
+    if last_article_id:
+        order_number = int(last_article_id[2:]) + 1
+        new_article_id = f"A{order_number:03}"
+    else:
+        new_article_id = "A001"
+
+    return new_article_id 
+
+def post_article(): 
+    #request body 
+    data = request.get_json()
+    banner_url = data.get('banner_url')
+    content = data.get('content')
+    title = data.get('title')
+
+    article_id = generate_article_id()
+
+    article_ref = db.collection('articles').document(str(article_id))
+    article_firestore_data = {
+        'article_id': article_id,
+        'banner_url' : banner_url,
+        'content': content,
+        'title': title,
+        'uploaded_date': datetime.now()
+    }
+    article_ref.set(article_firestore_data)
+
+    response_article = {"message": "Article Posted"}
+    return jsonify(response_article), 201
+
+def update_services(service_id):
+    # variabel data untuk request json
+    data = request.get_json()
+
+    # request body yang diperlukan 
+    description = data.get('description')
+    icon_url = data.get('icon_url')
+    title = data.get('title')
+
+    # Query firestore untuk mendaptkan layanan berdasarkan service_id
+    services_ref_query = db.collection('services').where("service_id", "==", service_id)
+
+    # mendapatkan hasil dari query diatas
+    services_results = list(services_ref_query.stream())
+
+    if not services_results:
+        return jsonify({"error": "Service not found"}), 404
+    
+    # Update document yang bersangkutan
+    for services_doc in services_results:
+        services_doc_ref = db.collection('services').document(services_doc.id)
+        services_data_update = {
+            "description": description,
+            "icon_url": icon_url,
+            "title": title
+        }
+        services_doc_ref.update(services_data_update)
+
+    response_update = {"message": "Services Updated"}
+    return jsonify(response_update), 201
