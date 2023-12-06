@@ -138,21 +138,21 @@ def admin_get_order(order_id):
     return jsonify(response), 200
 
 def generate_article_id():
-    # mendapatkan 'article_id' terakhir yang terdapat pada firestore
-    last_article_ref = db.collection('articles').order_by('order_id', direction=firestore.Query.DESCENDING).limit(1)
+    # Mendapatkan 'article_id' terakhir yang terdapat pada Firestore
+    last_article_ref = db.collection('articles').order_by('article_id', direction=firestore.Query.DESCENDING).limit(1)
     last_article = next(last_article_ref.stream(), None)
 
-    # Extract the order_id terakhir
-    last_article_id = last_article.to_dict().get('article_id') if last_article else None
+    # Ekstrak order_id terakhir
+    last_article_id = last_article.get('article_id') if last_article else None
 
     # Generate order_id baru
     if last_article_id:
-        order_number = int(last_article_id[2:]) + 1
+        order_number = int(last_article_id[1:]) + 1
         new_article_id = f"A{order_number:03}"
     else:
         new_article_id = "A001"
 
-    return new_article_id 
+    return new_article_id
 
 def post_article(): 
     #request body 
@@ -206,3 +206,15 @@ def update_services(service_id):
 
     response_update = {"message": "Services Updated"}
     return jsonify(response_update), 201
+
+def admin_get_services(service_id):
+    #query firestore untuk mendapatkan detail history order berdasarkan 'service_id'
+    detail_service_ref = db.collection('services').document(service_id)
+    detail_result = detail_service_ref.get().to_dict()
+
+    # Exclude key yang tidak perlu untuk respons
+    excluded_fields = ['category','service_id']
+
+    # return response
+    response = {key: value for key, value in detail_result.items() if key not in excluded_fields}
+    return jsonify(response), 200
