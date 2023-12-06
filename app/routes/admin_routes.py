@@ -1,6 +1,14 @@
 from flask import Blueprint
 from flask_jwt_extended import jwt_required
-from app.controllers.admin_controller import update_status_order, get_all_order, update_banner, get_order_count, get_user_count, admin_get_order
+from app.controllers.admin_controller import (
+    update_status_order, 
+    get_all_order, 
+    update_banner, 
+    get_order_count, 
+    get_user_count, 
+    admin_get_order, 
+    post_article, 
+    update_services)
 
 admin_routes = Blueprint('admin_routes', __name__)
 
@@ -33,3 +41,13 @@ def order_count_route():
 @jwt_required()
 def user_count_route():
     return get_user_count()
+
+@admin_routes.route('/post-article', methods=['POST'])
+@jwt_required()
+def post_article_route():
+    return post_article()
+
+@admin_routes.route('/service/<service_id>', methods=['PUT'])
+@jwt_required()
+def update_service_route(service_id):
+    return update_services(service_id)
