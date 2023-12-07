@@ -68,7 +68,7 @@
             }
           },
           "401": {
-            "description": "Unauthorized",
+            "description": "Email Exist",
             "content": {
               "application/json": {
                 "schema": {
@@ -80,12 +80,17 @@
                   }
                 },
                 "example": {
-                  "error": "Incorrect email/password"
+                  "error": "Email Sudah terdaftar"
                 }
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "RegisterAuth": []
+          }
+        ]
       }
     },
     "/login": {
@@ -123,8 +128,31 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "Incorrect email / password",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "example": {
+                  "error": "Incorrect Email / Password"
+                }
+              }
+            }
           }
-        }
+        },
+        "security": [
+          {
+            "LoginAuth": []
+          }
+        ]
       }
     },
     "/banners": {
@@ -1010,6 +1038,30 @@
         ]
       }
     },
+    "/getservice/all": {
+      "get": {
+        "tags": ["Admin"],
+        "summary": " Admin get all service for table ",
+        "operationId": "getAllService",
+        "responses": {
+          "201": {
+            "description": "succesful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref":"#/components/schemas/list-servicesResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
     "/getservice/<service_id>": {
       "get": {
         "tags": ["Admin"],
@@ -1043,6 +1095,98 @@
             "Bearer": []
           }
         ]
+      }
+    },
+    "/registerAdmin": {
+      "post": {
+        "tags": ["Admin"],
+        "summary": "register admin to admin dashboard",
+        "operationId": "registerAdmin",
+        "requestBody": {
+          "description": "Admin data that needs to be added to register",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/registerAdmin"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/registerAdminResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Admin sudah terdaftar",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "example": {
+                  "error": "Admin Sudah terdaftar"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "AdminAuth": []
+          }
+        ]
+      }
+    },    
+    "/loginAdmin": {
+      "post": {
+        "tags": ["Admin"],
+        "summary": "Admin login to admin application",
+        "operationId": "loginAdmin",
+        "parameters": [
+          {
+            "name": "admin_name",
+            "in": "Request Body",
+            "description": "name for login that admin have been registered ",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "password",
+            "in": "Request Body",
+            "description": "password for login that admin have been registered ",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "succesful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/registerAdminResponse"
+                }
+              }
+            }
+          }
+        }
       }
     }
   },
@@ -1740,6 +1884,31 @@
           },
           "title": {
             "type": "string"
+          }
+        }
+      },
+      "registerAdmin": {
+        "type": "object",
+        "properties": {
+          "admin_name": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      },
+      "registerAdminResponse": {
+        "type": "object",
+        "properties": {
+          "admin_id": {
+            "type": "string"
+          },
+          "admin_name":{
+            "type":"string"
+          },
+          "token":{
+            "type":"string"
           }
         }
       }                                                    
