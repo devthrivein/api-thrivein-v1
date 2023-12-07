@@ -10,3 +10,12 @@ def generate_token(user_id, name):
     }
     token = jwt.encode(payload, app.config['JWT_SECRET_KEY'], algorithm='HS256')
     return token
+
+def generate_token_admin(admin_id, admin_name):
+    payload = {
+        'sub': admin_id,
+        'name': admin_name,  
+        'exp': datetime.utcnow() + timedelta(days=1)  # Atur waktu kadaluwarsa token
+    }
+    token = jwt.encode(payload, app.config['JWT_SECRET_KEY'], algorithm='HS256')
+    return token
