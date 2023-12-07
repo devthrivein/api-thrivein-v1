@@ -1,5 +1,6 @@
 from flask import jsonify, request
 import uuid
+import math
 from datetime import datetime
 from app.config.config import db
 from firebase_admin import firestore
@@ -53,19 +54,39 @@ def service_portfolio(service_id):
 
     # Query ke Firestore untuk mendapatkan detail layanan berdasarkan ID serta implement pagination
     portfolio_ref = db.collection('portfolio')
+
+    # Query untuk mendapatkan semua data
+    all_portfolios = portfolio_ref.where('service_id', '==', service_id).stream()
+
+    # Hitung total data
+    total_data = len(list(all_portfolios))
+
+    # Hitung total halaman
+    total_pages = math.ceil(total_data / size)
+
+    # Query untuk halaman tertentu
     query = portfolio_ref.where('service_id', '==', service_id).limit(size).offset((page - 1) * size)
     results = query.stream()
 
-    #list untuk menyimpan portfolio
+    # list untuk menyimpan data portfolio
     portfolio_data = []
-
     for result in results:
-        portfolio_info= result.to_dict()
+        portfolio_info = result.to_dict()
         portfolio_data.append(portfolio_info)
 
     # return respons JSON dengan data portfolio
-    response = {"meta": page ,"portfolio": portfolio_data}
+    response = {
+        "meta": {
+            "total_data": total_data,
+            "total_pages": total_pages,
+            "current_page": page,
+            "data_per_page": size
+        },
+        "portfolio": portfolio_data
+    }
+
     return jsonify(response), 200
+
     
 def generate_order_id():
     # mendapatkan 'order_id' terakhir yang terdapat pada firestore
