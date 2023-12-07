@@ -9,9 +9,20 @@ from app.controllers.admin_controller import (
     admin_get_order, 
     post_article, 
     update_services,
-    admin_get_services)
+    admin_get_services,
+    get_all_services,
+    verify_login_admin,
+    register_admin)
 
 admin_routes = Blueprint('admin_routes', __name__)
+
+@admin_routes.route('/registerAdmin', methods=['POST'])
+def register_route():
+    return register_admin()
+
+@admin_routes.route('/loginAdmin', methods=['GET', 'POST'])
+def login_route():
+    return verify_login_admin()
 
 @admin_routes.route('/order-progress/<order_id>', methods=['PUT'])
 @jwt_required()
@@ -52,6 +63,11 @@ def post_article_route():
 @jwt_required()
 def update_service_route(service_id):
     return update_services(service_id)
+
+@admin_routes.route('/getservice/all', methods=['GET'])
+@jwt_required()
+def get_all_service_route():
+    return get_all_services()
 
 @admin_routes.route('/getservice/<service_id>', methods=['GET'])
 @jwt_required()

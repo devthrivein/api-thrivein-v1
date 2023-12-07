@@ -2,6 +2,9 @@ from flask import jsonify, request
 from app.config.config import db
 from datetime import datetime
 from firebase_admin import firestore
+from app.models.user_token import generate_token_admin
+from uuid import uuid4
+import bcrypt
 
 def update_status_order(order_id):
     # variabel data untuk request json
@@ -218,3 +221,118 @@ def admin_get_services(service_id):
     # return response
     response = {key: value for key, value in detail_result.items() if key not in excluded_fields}
     return jsonify(response), 200
+
+def get_all_services():
+    # Query ke firestore untuk mendapatkan 'all services'
+    services_ref = db.collection('services')
+    results = services_ref.stream()
+
+    # Respon
+    list_services = []
+    for result in results:
+        service_info = result.to_dict()
+        list_services.append(service_info)
+
+    response = {"list-services": list_services}
+    return jsonify(response), 200
+
+def verify_login_admin():
+    # Periksa apakah permintaan POST "email" dan "password" ada
+    if request.method == 'POST' and 'admin_name' in request.get_json() and 'password' in request.get_json():
+        # variabel untuk mendapatkan data dari formulir
+        data = request.get_json()
+        admin_name = data.get('admin_name')
+        plain_password = data.get('password')
+
+        # referensi ke koleksi "user" di Firestore
+        accounts_ref = db.collection('admin')
+
+        # Query ke Firestore untuk mencari akun dengan admin_name yang sesuai
+        query = accounts_ref.where('admin_name', '==', admin_name)
+        results = query.stream()
+
+        # Jika ada akun dengan email yang sesuai
+        for result in results:
+            account_data = result.to_dict()
+            hashed_password = account_data.get("password", "")
+
+            # Periksa apakah plain_password sesuai dengan hashed_password
+            if bcrypt.checkpw(plain_password.encode('utf-8'), hashed_password.encode('utf-8')):
+                
+                # Generate token baru untuk user
+                admin_id = account_data['admin_id']
+                admin_name = account_data['admin_name']
+                new_token = generate_token_admin(admin_id, admin_name)
+
+                # Update admin's token di database
+                admin_ref = db.collection('admin').document(admin_id)
+                admin_ref.update({
+                    'token': new_token
+                })
+
+                # Retrieve data user yang sudah di update
+                updated_admin_data = admin_ref.get().to_dict()
+
+                # variabel data store dan user di firestore untuk response
+                token = updated_admin_data.get("token", None)
+
+                # Persiapkan response
+                response = {
+                    "admin_id": admin_id,
+                    "admin_name": admin_name,
+                    "token": token
+                }
+
+                return jsonify(response), 201
+
+        # Jika akun tidak ditemukan atau password salah
+        response = {"error": "Incorrect admin_name/password"}
+        return jsonify(response), 401
+
+    # Jika email atau password tidak disertakan dalam permintaan
+    response = {"error": "Missing admin_name or password in the request"}
+    return jsonify(response), 400
+
+
+def register_admin():
+    
+    #user request body
+    data = request.get_json()
+    admin_name = data.get('admin_name')
+    plain_password = data.get('password')
+
+    # generate id admin dengan uuid
+    admin_id = str(uuid4())
+
+    # Hash kata sandi menggunakan bcrypt
+    hashed_password = bcrypt.hashpw(plain_password.encode('utf-8'), bcrypt.gensalt())
+
+    # Query ke Firestore untuk memeriksa apakah email sudah terdaftar
+    nama_exists_query = db.collection('admin').where('admin_name', '==', admin_name)
+    nama_exists_result = nama_exists_query.stream()
+    # Jika nama sudah terdaftar, kembalikan respons dengan error message
+    if len(list(nama_exists_result)) > 0:
+        response = {"error": "Admin sudah terdaftar"}
+        return jsonify(response), 400
+    
+    
+    # Simpan informasi admin ke Firestore
+    admin_ref = db.collection('admin').document(str(admin_id))
+    token = generate_token_admin(admin_id, admin_name)
+    admin_firestore_data = {
+        'created_at': datetime.now(),
+        'admin_name':admin_name,
+        'admin_id': admin_id,
+        'password': hashed_password.decode('utf-8'), 
+        'token': token  
+    }
+    admin_ref.set(admin_firestore_data)
+
+    # Exclude key 'password' untuk response
+    response_data = {
+        key: value for key, value in admin_firestore_data.items() if key not in ['password', 'created_at']
+    }
+    # Persiapkan response
+    response = response_data  
+
+    return jsonify(response), 201  # Mengembalikan respons JSON
