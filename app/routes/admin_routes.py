@@ -8,7 +8,8 @@ from app.controllers.admin_controller import (
     get_user_count, 
     admin_get_order, 
     post_article, 
-    update_services)
+    update_services,
+    admin_get_services)
 
 admin_routes = Blueprint('admin_routes', __name__)
 
@@ -51,3 +52,8 @@ def post_article_route():
 @jwt_required()
 def update_service_route(service_id):
     return update_services(service_id)
+
+@admin_routes.route('/getservice/<service_id>', methods=['GET'])
+@jwt_required()
+def get_service_route(service_id):
+    return admin_get_services(service_id)

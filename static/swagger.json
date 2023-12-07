@@ -969,6 +969,17 @@
         "tags": ["Admin"],
         "summary": " Admin update data service ",
         "operationId": "putservice",
+        "parameters": [
+          {
+            "name": "service_id",
+            "in": "path",
+            "description": "ID of the service to be updated",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "requestBody": {
           "description": "service data that can be updated",
           "required": true,
@@ -987,6 +998,41 @@
               "application/json": {
                 "schema": {
                   "$ref":"#/components/schemas/updateServiceResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/getservice/<service_id>": {
+      "get": {
+        "tags": ["Admin"],
+        "summary": " Admin update data service ",
+        "operationId": "getadminservice",
+        "parameters": [
+          {
+            "name": "service_id",
+            "in": "path",
+            "description": "ID of the service to be updated",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "succesful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref":"#/components/schemas/updateService"
                 }
               }
             }
