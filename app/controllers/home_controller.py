@@ -1,5 +1,6 @@
 from flask import jsonify, request
 from app.config.config import db
+import math
 
 def get_banner():
     # Query ke Firestore untuk mendapatkan data banner
@@ -24,6 +25,14 @@ def articles():
 
     # query ke firestore untuk mendapatkan data article
     articles_ref = db.collection('articles')
+
+    # Hitung total data
+    total_data = len(list(articles_ref.stream()))
+
+    # Hitung total halaman
+    total_pages = math.ceil(total_data / size)
+
+    # Query untuk halaman tertentu
     query = articles_ref.limit(size).offset((page - 1) * size)
     results = query.stream()
 
@@ -34,8 +43,18 @@ def articles():
         article_data.append(article_info)
 
     #return response
-    response = {"meta": page,"articles": article_data }
+    response = {
+        "meta": {
+            "total_data": total_data,
+            "total_pages": total_pages,
+            "current_page": page,
+            "data_per_page": size
+        },
+        "articles": article_data
+    }
+
     return jsonify(response), 200
+
 
 
 def services():
