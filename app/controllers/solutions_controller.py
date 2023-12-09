@@ -118,28 +118,39 @@ def generate_invoice_number():
     return invoice_number
 
 def send_order():
-    # mendapatkan user_id dari JWT
+    # Mendapatkan user_id dari JWT
     current_user = get_jwt_identity()
 
-    # variabel data untuk request json
+    # Variabel data untuk request json
     data = request.get_json()
 
-    # request body yang diperlukan 
+    # Request body yang diperlukan 
     consultation_id = data.get('consultation_id')
-    title = data.get('title')
+    service_id = data.get('service_id')
     payment_method = data.get('payment_method')
     total_order = data.get('total_order')
     discount = data.get('discount')
     total_pay = data.get('total_pay')
 
+    # Mengambil data service dari koleksi services
+    service_ref = db.collection('services').document(service_id)
+    service_data = service_ref.get().to_dict()
+
+    # Memastikan service dengan service_id yang diberikan ada
+    if not service_data:
+        return jsonify({"error": "Service not found"}), 404
+
+    # Mendapatkan title dari service_data
+    title = service_data.get('title')
+
     # Generate order_id baru
     order_id = generate_order_id()
-    #generate invoice
+    # Generate invoice
     no_invoice = generate_invoice_number()
 
     user_ref = db.collection('user').where("user.user_id", "==", current_user).limit(1)
     
-    # pengecekan kembali apakah user_id benar benar ada
+    # Pengecekan kembali apakah user_id benar-benar ada
     user_results = list(user_ref.stream())
     
     if not user_results:
@@ -160,7 +171,7 @@ def send_order():
     order_data = {
         "consultation_id": consultation_id, 
         "order_id": order_id,
-        "title": title,
+        "title": title,  # Gunakan title dari service_data
         "transaction_date": datetime.now(),
         "payment_method": payment_method,
         "total_order" : total_order,
@@ -170,6 +181,7 @@ def send_order():
         "address": address,
         "status" : "baru",
         "user_id": current_user,
+        "service_id": service_id, 
         "name": name,
         "invoice": no_invoice
     }
@@ -177,7 +189,7 @@ def send_order():
 
     # Response data dan exclude key yang tidak perlu pada response
     response_data = {
-        key: value for key, value in order_data.items() if key not in ['consultation_id', 'is_order_now','address']
+        key: value for key, value in order_data.items() if key not in ['consultation_id', 'is_order_now', 'address']
     }
 
     return jsonify(response_data), 201
@@ -214,26 +226,37 @@ def update_order(order_id):
 
 
 def order_later():
-    # mendapatkan user_id dari JWT
+    # Mendapatkan user_id dari JWT
     current_user = get_jwt_identity()
 
-    # variabel data untuk request JSON
+    # Variabel data untuk request JSON
     data = request.get_json()
 
     # Request body yang diperlukan 
     consultation_id = data.get('consultation_id')
-    title = data.get('title')
+    service_id = data.get('service_id')
     payment_method = data.get('payment_method')
     total_order = data.get('total_order')
     discount = data.get('discount')
     total_pay = data.get('total_pay')
+
+    # Mengambil data service dari koleksi services
+    service_ref = db.collection('services').document(service_id)
+    service_data = service_ref.get().to_dict()
+
+    # Memastikan service dengan service_id yang diberikan ada
+    if not service_data:
+        return jsonify({"error": "Service not found"}), 404
+
+    # Mendapatkan title dari service_data
+    title = service_data.get('title')
 
     # Generate a new order_id
     order_id = generate_order_id()
 
     user_ref = db.collection('user').where("user.user_id", "==", current_user).limit(1)
     
-    # pengecekan kembali apakah user_id ada 
+    # Pengecekan kembali apakah user_id ada 
     user_results = list(user_ref.stream())
     
     if not user_results:
@@ -264,6 +287,7 @@ def order_later():
         "address": address,
         "status" : "baru",
         "user_id": current_user,
+        "service_id": service_id,
         "name": name 
     }
     order_ref.set(order_data)
