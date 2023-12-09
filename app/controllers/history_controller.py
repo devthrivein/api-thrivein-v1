@@ -32,14 +32,31 @@ def history_order(user_id):
     return jsonify(response), 200
 
 def detail_history_order(order_id):
-    #query firestore untuk mendapatkan detail history order berdasarkan 'order_id'
+    # Query firestore untuk mendapatkan detail history order berdasarkan 'order_id'
     detail_history_ref = db.collection('order').document(order_id)
     detail_result = detail_history_ref.get().to_dict()
+
+    # Mendapatkan service_id dari order
+    service_id = detail_result.get('service_id')
+
+    # Query firestore untuk mendapatkan info service berdasarkan service_id
+    service_ref = db.collection('services').document(service_id)
+    service_data = service_ref.get().to_dict()
+
+    # Memastikan service dengan service_id yang diberikan ada
+    if not service_data:
+        return jsonify({"error": "Service not found"}), 404
+
+    # Mendapatkan icon_url dari service_data
+    icon_url = service_data.get('icon_url')
 
     # Exclude key yang tidak perlu untuk respons
     excluded_fields = ['user_id', 'consultation_id']
 
-    # return response
+    # Menambahkan icon_url ke respons
     response = {key: value for key, value in detail_result.items() if key not in excluded_fields}
+    response['icon_url'] = icon_url
+
     return jsonify(response), 200
+
 
