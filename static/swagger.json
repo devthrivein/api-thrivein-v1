@@ -1515,7 +1515,7 @@
           "consultation_id": {
             "type": "string"
           },
-          "title": {
+          "service_id": {
             "type": "string"
           },
           "payment_method": {
@@ -1549,6 +1549,9 @@
           },
           "title": {
             "type": "string"
+          },
+          "service_id":{
+            "type":"string"
           },
           "total_order": {
             "type": "integer"
@@ -1636,6 +1639,9 @@
                 "transactionDate": {
                   "type": "string",
                   "format": "date-time"
+                },
+                "icon_url":{
+                  "type":"string"
                 }
               }
             }
