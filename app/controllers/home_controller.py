@@ -55,7 +55,17 @@ def articles():
 
     return jsonify(response), 200
 
+def detail_article(article_id):
+    #query firestore untuk mendapatkan detail article berdasarkan 'service_id'
+    detail_article_ref = db.collection('articles').document(article_id)
+    detail_result = detail_article_ref.get().to_dict()
 
+    # Exclude key yang tidak perlu untuk respons
+    excluded_fields = ['article_id']
+
+    # return response
+    response = {key: value for key, value in detail_result.items() if key not in excluded_fields}
+    return jsonify(response), 200
 
 def services():
 

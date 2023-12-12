@@ -1,5 +1,5 @@
 from flask import Blueprint
-from app.controllers.home_controller import get_banner, services, articles
+from app.controllers.home_controller import get_banner, services, articles, detail_article
 from flask_jwt_extended import jwt_required
 
 home_routes = Blueprint('home_routes', __name__)
@@ -14,6 +14,12 @@ def banners_route():
 def articles_route():
     return articles()
 
+@home_routes.route('/articles/<article_id>', methods=['GET'])
+@jwt_required()
+def detail_articles_route(article_id):
+    return detail_article(article_id)
+
 @home_routes.route('/services', methods=['GET'])
+@jwt_required()
 def services_route():
     return services()

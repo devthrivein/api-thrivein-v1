@@ -247,6 +247,30 @@
         ]
       }
     },
+    "/articles/<article_id>": {
+      "get": {
+        "tags": ["Home"],
+        "summary": "Get detail articles from the database",
+        "operationId": "getDetailArticles",
+        "responses": {
+          "201": {
+            "description": "succesful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/detailArticleResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
     "/list-services/<category>":{
       "get": {
         "tags": ["Solutions"],
@@ -1418,7 +1442,25 @@
             }
           }
         }
-      },      
+      },
+      "detailArticleResponse": {
+        "type": "object",
+        "properties": {
+          "banner_url": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "uploaded_date": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },            
       "list-servicesResponse": {
         "type": "object",
         "properties": {
