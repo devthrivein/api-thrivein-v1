@@ -7,6 +7,7 @@ from app.controllers.solutions_controller import (
     get_order, 
     order_later, 
     update_order,
+    welcome_message
 )
 from flask_jwt_extended import jwt_required
 
@@ -26,6 +27,11 @@ def service_detail_route(service_id):
 @jwt_required()
 def portfolio_route(service_id):
     return service_portfolio(service_id)
+
+@solutions_route.route('/detail-services/<service_id>/welcome-message', methods=['GET'])
+@jwt_required()
+def welcome_route(service_id):
+    return welcome_message(service_id)
 
 @solutions_route.route('/list-services/order', methods=['POST'])
 @jwt_required()

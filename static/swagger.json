@@ -395,6 +395,41 @@
         ]
       }
     },
+    "/detail-services/<service_id>/welcome-message":{
+      "get": {
+        "tags": ["Solutions"],
+        "summary": "Get welcome message for consult",
+        "operationId": "getWelcomeMessage",
+        "parameters": [
+          {
+            "name": "service_id",
+            "in": "route",
+            "description": "the id of service",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "succesful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/welcomeMessageResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
     "/list-services/order": {
       "post": {
         "tags": ["Solutions"],
@@ -1557,6 +1592,31 @@
           }
         }
       },
+      "welcomeMessageResponse": {
+        "type": "object",
+        "properties": {
+          "welcome_message": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "content": {
+                  "type": "string"
+                },
+                "is_admin": {
+                  "type": "boolean"
+                },
+                "service_id": {
+                  "type": "string"
+                },
+                "welcome_id": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },      
       "sendOrder": {
         "type": "object",
         "properties": {

@@ -88,6 +88,22 @@ def service_portfolio(service_id):
 
     return jsonify(response), 200
 
+def welcome_message (service_id):
+    welcome_message_ref = db.collection('welcome_message').where('service_id', '==', service_id)
+    results = welcome_message_ref.stream()
+
+    # list untuk menyimpan data portfolio
+    welcome_data = []
+    for result in results:
+        welcome_info = result.to_dict()
+        welcome_data.append(welcome_info)
+
+    # return respons JSON dengan data portfolio
+    response = {
+        "welcome_message": welcome_data
+    }
+
+    return jsonify(response), 200
     
 def generate_order_id():
     # mendapatkan 'order_id' terakhir yang terdapat pada firestore
