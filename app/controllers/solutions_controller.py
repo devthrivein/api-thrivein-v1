@@ -43,6 +43,7 @@ def service_detail(service_id):
         'service_id': service_id,
         'icon_url': service_data.get('icon_url', ''),
         'title': service_data.get('title', ''),
+        'price': service_data.get('price', ''),
         'description': service_data.get('description', '')
     }
     return jsonify(response), 200

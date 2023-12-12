@@ -1481,6 +1481,9 @@
                 "title": {
                   "type": "string"
                 },
+                "price": {
+                  "type": "integer"
+                },
                 "category": {
                   "type": "string"
                 }
@@ -1500,6 +1503,9 @@
           },
           "service_id": {
             "type": "string"
+          },
+          "price": {
+            "type": "integer"
           },
           "title": {
             "type": "string"
