@@ -142,7 +142,6 @@ def send_order():
     data = request.get_json()
 
     # Request body yang diperlukan 
-    consultation_id = data.get('consultation_id')
     service_id = data.get('service_id')
     payment_method = data.get('payment_method')
     total_order = data.get('total_order')
@@ -186,7 +185,6 @@ def send_order():
     # Simpan data ke Firestore
     order_ref = db.collection('order').document(order_id)
     order_data = {
-        "consultation_id": consultation_id, 
         "order_id": order_id,
         "title": title,  # Gunakan title dari service_data
         "transaction_date": datetime.now(),
@@ -206,7 +204,7 @@ def send_order():
 
     # Response data dan exclude key yang tidak perlu pada response
     response_data = {
-        key: value for key, value in order_data.items() if key not in ['consultation_id', 'is_order_now', 'address']
+        key: value for key, value in order_data.items() if key not in ['is_order_now', 'address']
     }
 
     return jsonify(response_data), 201
@@ -250,7 +248,6 @@ def order_later():
     data = request.get_json()
 
     # Request body yang diperlukan 
-    consultation_id = data.get('consultation_id')
     service_id = data.get('service_id')
     payment_method = data.get('payment_method')
     total_order = data.get('total_order')
@@ -292,7 +289,6 @@ def order_later():
     # Simpan order data ke Firestore
     order_ref = db.collection('order').document(order_id)
     order_data = {
-        "consultation_id": consultation_id, 
         "order_id": order_id,
         "title": title,
         "transaction_date": datetime.now(),
@@ -311,7 +307,7 @@ def order_later():
 
     # Response data
     response_data = {
-        key: value for key, value in order_data.items() if key not in ['consultation_id', 'is_order_now','address']
+        key: value for key, value in order_data.items() if key not in ['is_order_now','address']
     }
 
     # Return response
@@ -342,6 +338,8 @@ def item_service(service_id):
 
     # list untuk menyimpan data article 
     item_data = []
+    total_order = 0  # inisialisasi total_order
+
     for result in results:
         item_info = result.to_dict()
 
@@ -350,9 +348,14 @@ def item_service(service_id):
 
         item_data.append(item_info)
 
-    # return response
+        # Menambahkan price ke total_order
+        total_order += item_info.get('price', 0)
+
+    # Menambahkan total_order ke dalam response
     response = {
-        "item": item_data
+        "item": item_data,
+        "total_order": total_order
     }
 
-    return jsonify(response), 200
+    # return response
+    return response
