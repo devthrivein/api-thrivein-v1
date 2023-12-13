@@ -1655,9 +1655,6 @@
       "sendOrder": {
         "type": "object",
         "properties": {
-          "consultation_id": {
-            "type": "string"
-          },
           "service_id": {
             "type": "string"
           },
@@ -1721,9 +1718,6 @@
         "type": "object",
         "properties": {
           "address": {
-            "type": "string"
-          },
-          "consultation_id": {
             "type": "string"
           },
           "discount": {
@@ -2117,6 +2111,9 @@
                 }
               }
             }
+          },
+          "total_order":{
+            "type":"integer"
           }
         }
       }                                                          
