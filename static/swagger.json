@@ -575,6 +575,41 @@
         ]
       }
     },
+    "/order-packages/<service_id>": {
+      "get": {
+        "tags": ["Solutions"],
+        "summary": " user get item data in package",
+        "operationId": "getItem",
+        "parameters": [
+          {
+            "name": "service_id",
+            "in": "route",
+            "description": "the id of service",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "succesful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/getItemResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
     "/history-order": {
       "get": {
         "tags": ["History"],
@@ -2059,7 +2094,32 @@
             "type":"string"
           }
         }
-      }                                                    
+      },
+      "getItemResponse": {
+        "type": "object",
+        "properties": {
+          "item": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "price": {
+                  "type": "integer"
+                },
+                "qty": {
+                  "type": "integer"
+                },
+                "item_id": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }                                                          
     }
   }
 }
