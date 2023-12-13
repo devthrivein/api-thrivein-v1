@@ -33,18 +33,18 @@ def portfolio_route(service_id):
 def welcome_route(service_id):
     return welcome_message(service_id)
 
-@solutions_route.route('/list-services/order', methods=['POST'])
+@solutions_route.route('/order-now', methods=['POST'])
 @jwt_required()
 def send_order_route():
     return send_order()
 
-@solutions_route.route('/list-services/order-update/<order_id>', methods=['PUT'])
+@solutions_route.route('/order-update/<order_id>', methods=['PUT'])
 @jwt_required()
 def update_order_route(order_id):
     return update_order(order_id)
 
 
-@solutions_route.route('/list-services/order-later', methods=['POST'])
+@solutions_route.route('/order-later', methods=['POST'])
 @jwt_required()
 def order_later_route():
     return order_later()
