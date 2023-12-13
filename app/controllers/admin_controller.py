@@ -262,6 +262,7 @@ def verify_login_admin():
                 # Generate token baru untuk user
                 admin_id = account_data['admin_id']
                 admin_name = account_data['admin_name']
+                is_admin = account_data['is_admin']
                 new_token = generate_token_admin(admin_id, admin_name)
 
                 # Update admin's token di database
@@ -280,7 +281,8 @@ def verify_login_admin():
                 response = {
                     "admin_id": admin_id,
                     "admin_name": admin_name,
-                    "token": token
+                    "token": token,
+                    "is_admin" : is_admin
                 }
 
                 return jsonify(response), 201
@@ -324,11 +326,12 @@ def register_admin():
         'admin_name':admin_name,
         'admin_id': admin_id,
         'password': hashed_password.decode('utf-8'), 
-        'token': token  
+        'token': token,
+        'is_admin': True  
     }
     admin_ref.set(admin_firestore_data)
 
-    # Exclude key 'password' untuk response
+    # Exclude key 'password dan created at' untuk response
     response_data = {
         key: value for key, value in admin_firestore_data.items() if key not in ['password', 'created_at']
     }
