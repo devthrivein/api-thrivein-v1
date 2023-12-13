@@ -7,7 +7,8 @@ from app.controllers.solutions_controller import (
     get_order, 
     order_later, 
     update_order,
-    welcome_message
+    welcome_message,
+    item_service
 )
 from flask_jwt_extended import jwt_required
 
@@ -53,3 +54,8 @@ def order_later_route():
 @jwt_required()
 def get_order_route(order_id):
     return get_order(order_id)
+
+@solutions_route.route('/order-packages/<service_id>', methods=['GET'])
+@jwt_required()
+def get_item_route(service_id):
+    return item_service(service_id)

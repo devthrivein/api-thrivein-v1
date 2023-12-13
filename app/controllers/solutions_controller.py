@@ -335,3 +335,24 @@ def get_order(order_id):
         # If the order with the specified order_id is not found, return an error response
         error_response = {"error": "Order not found"}
         return jsonify(error_response), 404
+    
+def item_service(service_id):
+    item_ref = db.collection('item_service').where("service_id", "==", service_id)
+    results = item_ref.stream()
+
+    # list untuk menyimpan data article 
+    item_data = []
+    for result in results:
+        item_info = result.to_dict()
+
+        # Menghilangkan 'service_id' dari setiap elemen
+        item_info.pop('service_id', None)
+
+        item_data.append(item_info)
+
+    # return response
+    response = {
+        "item": item_data
+    }
+
+    return jsonify(response), 200
