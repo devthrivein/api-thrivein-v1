@@ -430,7 +430,7 @@
         ]
       }
     },
-    "/list-services/order": {
+    "/order-now": {
       "post": {
         "tags": ["Solutions"],
         "summary": " user send order to ThriveIn application",
@@ -465,7 +465,7 @@
         ]
       }
     },
-    "/list-services/order-later": {
+    "/order-later": {
       "post": {
         "tags": ["Solutions"],
         "summary": " user not yet order to ThriveIn application",
@@ -500,7 +500,7 @@
         ]
       }
     },
-    "/list-services/order-update/<order_id>": {
+    "/order-update/<order_id>": {
       "put": {
         "tags": ["Solutions"],
         "summary": " user hit the order now button after order later ",
@@ -2051,6 +2051,9 @@
           },
           "admin_name":{
             "type":"string"
+          },
+          "is_admin":{
+            "type":"boolean"
           },
           "token":{
             "type":"string"
