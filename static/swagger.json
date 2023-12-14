@@ -203,6 +203,46 @@
         ]
       }
     },
+    "/predict": {
+      "post": {
+        "tags": ["Home"],
+        "summary": "Trigger the ML Model",
+        "operationId": "makePrediction",
+        "requestBody": {
+          "description": "Image data for prediction",
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "image": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/predictionResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },    
     "/articles": {
       "get": {
         "tags": ["Home"],
@@ -2116,7 +2156,33 @@
             "type":"integer"
           }
         }
-      }                                                          
+      },
+      "predictionResponse": {
+        "type": "object",
+        "properties": {
+          "paragraf_1": {
+            "type": "string"
+          },
+          "paragraf_2": {
+            "type": "string"
+          },
+          "paragraf_3": {
+            "type": "string"
+          },
+          "paragraf_4": {
+            "type": "string"
+          },
+          "paragraf_5": {
+            "type": "string"
+          },
+          "paragraf_6": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          }
+        }
+      }                                                                
     }
   }
 }
