@@ -10,6 +10,7 @@ from app.routes.solutions_routes import solutions_route
 from app.routes.waiting_routes import waiting_routes
 from app.routes.user_routes import user_setting_routes
 from app.routes.admin_routes import admin_routes
+from app.routes.ml_routes import ml_routes
 from flask_swagger_ui import get_swaggerui_blueprint
 
 app = Flask(__name__)
@@ -40,6 +41,7 @@ app.register_blueprint(solutions_route)
 app.register_blueprint(waiting_routes)
 app.register_blueprint(user_setting_routes)
 app.register_blueprint(admin_routes)
+app.register_blueprint(ml_routes)
 
 
 if __name__ == '__main__':
