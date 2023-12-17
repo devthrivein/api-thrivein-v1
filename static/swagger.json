@@ -1828,19 +1828,29 @@
       "detailHistoryResponse": {
         "type": "object",
         "properties": {
-          "discount": {
-            "type": "integer"
+          "address": {
+            "type": "string"
           },
-          "is_order_now": {
-            "type": "boolean"
+          "discount": {
+            "type": "number"
+          },
+          "icon_url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "invoice": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
           },
           "order_id": {
             "type": "string"
           },
-          "icon_url":{
-            "type":"string"
-          },
           "payment_method": {
+            "type": "string"
+          },
+          "service_id": {
             "type": "string"
           },
           "status": {
@@ -1850,17 +1860,20 @@
             "type": "string"
           },
           "total_order": {
-            "type": "integer"
+            "type": "number"
           },
           "total_pay": {
-            "type": "integer"
+            "type": "number"
           },
           "transaction_date": {
             "type": "string",
             "format": "date-time"
+          },
+          "user_id": {
+            "type": "string"
           }
         }
-      },
+      },      
       "settingResponse": {
         "type": "object",
         "properties": {
@@ -1911,6 +1924,10 @@
             "items": {
               "type": "object",
               "properties": {
+                "icon_url": {
+                  "type": "string",
+                  "format": "uri"
+                },
                 "order_id": {
                   "type": "string"
                 },
@@ -1929,16 +1946,26 @@
       "detailWaitingResponse": {
         "type": "object",
         "properties": {
+          "address": {
+            "type": "string"
+          },
           "discount": {
             "type": "integer"
           },
-          "is_order_now": {
-            "type": "boolean"
+          "icon_url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "name": {
+            "type": "string"
           },
           "order_id": {
             "type": "string"
           },
           "payment_method": {
+            "type": "string"
+          },
+          "service_id": {
             "type": "string"
           },
           "status": {
@@ -1956,9 +1983,12 @@
           "transaction_date": {
             "type": "string",
             "format": "date-time"
+          },
+          "user_id": {
+            "type": "string"
           }
         }
-      },
+      },      
       "allOrderResponse": {
         "type": "object",
         "properties": {
