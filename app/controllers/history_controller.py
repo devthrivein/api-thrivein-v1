@@ -51,7 +51,7 @@ def detail_history_order(order_id):
     icon_url = service_data.get('icon_url')
 
     # Exclude key yang tidak perlu untuk respons
-    excluded_fields = ['user_id', 'consultation_id']
+    excluded_fields = ['is_order_now']
 
     # Menambahkan icon_url ke respons
     response = {key: value for key, value in detail_result.items() if key not in excluded_fields}
