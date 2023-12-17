@@ -25,8 +25,9 @@ def predict():
 
     # Load and preprocess the image
     file_data = BytesIO(file.read())
-    img = load_img(file_data, target_size=(450, 450))
+    img = load_img(file_data, target_size=(299, 299))
     x = img_to_array(img)
+    x /= 255. # Normalize image
     x = np.expand_dims(x, axis=0)
 
     # Make predictions
