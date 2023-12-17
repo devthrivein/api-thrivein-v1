@@ -2167,6 +2167,9 @@
             "items": {
               "type": "object",
               "properties": {
+                "image_url": {
+                  "type": "string"
+                },
                 "price": {
                   "type": "integer"
                 },
