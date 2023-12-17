@@ -14,7 +14,7 @@ controllers_dir = os.path.dirname(os.path.abspath(__file__))
 app_dir = os.path.dirname(controllers_dir)
 
 # Mendapatkan path ke direktori 'models/1'
-model_path = os.path.join(app_dir, 'models', '1')
+model_path = os.path.join(app_dir, 'models', 'inception_tl', '1')
 
 model = load_model(model_path)
 
