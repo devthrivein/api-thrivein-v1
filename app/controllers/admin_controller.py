@@ -339,3 +339,26 @@ def register_admin():
     response = response_data  
 
     return jsonify(response), 201  # Mengembalikan respons JSON
+
+def get_consult_service():
+    consultation_service_ref = db.collection('consultation_service')
+    documents = consultation_service_ref.stream()
+
+    result = []
+    for doc in documents:
+        document_data = doc.to_dict()
+        service_id ={'service_id': document_data.get('service_id', '')}
+        result.append(service_id)
+
+    return jsonify(result), 201
+
+def get_messages(service_id):
+    message_ref = db.collection('consultation_service').document(service_id).collections()
+
+    chat_collection = []
+    for collection in message_ref:
+        chat_collection.append({
+            'collection_id': collection.id,
+        })
+
+    return jsonify(chat_collection), 200

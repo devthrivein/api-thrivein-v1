@@ -12,7 +12,10 @@ from app.controllers.admin_controller import (
     admin_get_services,
     get_all_services,
     verify_login_admin,
-    register_admin)
+    register_admin,
+    get_consult_service,
+    get_messages
+)
 
 admin_routes = Blueprint('admin_routes', __name__)
 
@@ -73,3 +76,13 @@ def get_all_service_route():
 @jwt_required()
 def get_service_route(service_id):
     return admin_get_services(service_id)
+
+@admin_routes.route('/consultation-service', methods=['GET'])
+@jwt_required()
+def get_consult_route():
+    return get_consult_service()
+
+@admin_routes.route('/consultation-service/<service_id>', methods=['GET'])
+@jwt_required()
+def get_message_route(service_id):
+    return get_messages(service_id)
