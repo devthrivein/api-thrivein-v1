@@ -1322,6 +1322,65 @@
           }
         }
       }
+    },
+    "/consultation-service": {
+      "get": {
+        "tags": ["Admin"],
+        "summary": " Admin get doc in consultation service ",
+        "operationId": "getConsult",
+        "responses": {
+          "201": {
+            "description": "succesful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref":"#/components/schemas/getConsultResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/consultation-service/<service_id>": {
+      "get": {
+        "tags": ["Admin"],
+        "summary": " Admin get message in each service ",
+        "operationId": "getMessage",
+        "parameters": [
+          {
+            "name": "service_id",
+            "in": "path",
+            "description": "ID of the service to be updated",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "succesful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref":"#/components/schemas/getMessageResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
     }
   },
   "components": {
@@ -2215,7 +2274,29 @@
             "type": "string"
           }
         }
-      }                                                                
+      },
+      "getConsultResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "service_id": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "getMessageResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "collection_id": {
+              "type": "string"
+            }
+          }
+        }
+      }                                                                            
     }
   }
 }
